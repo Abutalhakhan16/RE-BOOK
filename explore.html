@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - ReBook</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">ReBook</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="explore.html" class="active">Explore</a></li>
+                <li><a href="sell-upload.html">Sell</a></li>
+                <li><a href="publish-ebook.html">Publish</a></li>
+                <li><a href="dashboard.html" class="nav-button">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="scroll-section" style="padding-top: 2rem;">
+        <h2 class="section-title">Explore All Books</h2>
+        
+        <div style="margin-bottom: 2rem;">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                <button class="category-pill active" data-category="all">All Categories</button>
+                <button class="category-pill" data-category="Fiction">Fiction</button>
+                <button class="category-pill" data-category="Science Fiction">Sci-Fi</button>
+                <button class="category-pill" data-category="Romance">Romance</button>
+                <button class="category-pill" data-category="Self-Help">Self-Help</button>
+                <button class="category-pill" data-category="Technology">Tech</button>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label for="sort-filter" style="color: var(--text-secondary);">Sort:</label>
+                    <select id="sort-filter" style="padding: 0.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--surface); color: var(--text-primary);">
+                        <option value="newest">Newest</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="text" id="search-input" placeholder="Search books..." style="padding: 0.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--surface); color: var(--text-primary); width: 200px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="books-grid" id="books-container">
+            <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Loading books...</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 ReBook. Empowering readers and creators worldwide.</p>
+    </footer>
+
+    <style>
+        .category-pill {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border);
+            background-color: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-pill:hover {
+            border-color: var(--primary-light);
+            color: var(--primary-light);
+        }
+
+        .category-pill.active {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            border-color: var(--primary-light);
+            color: white;
+        }
+    </style>
+
+    <script src="api-service.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        let currentCategory = 'all';
+        let currentSort = 'newest';
+        let currentSearch = '';
+
+        const categoryButtons = document.querySelectorAll('.category-pill');
+        const sortFilter = document.getElementById('sort-filter');
+        const searchInput = document.getElementById('search-input');
+        const booksContainer = document.getElementById('books-container');
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                currentCategory = e.target.dataset.category;
+                loadBooks();
+            });
+        });
+
+        sortFilter.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            loadBooks();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            loadBooks();
+        });
+
+        async function loadBooks() {
+            try {
+                const filters = { sort: currentSort };
+                if (currentCategory !== 'all') filters.category = currentCategory;
+                if (currentSearch) filters.search = currentSearch;
+
+                const books = await apiService.getAllBooks(filters);
+                renderBooks(books);
+            } catch (error) {
+                console.error('Error loading books:', error);
+                booksContainer.innerHTML = '<p style="color: var(--error); text-align: center;">Error loading books</p>';
+            }
+        }
+
+        function renderBooks(books) {
+            if (!books || books.length === 0) {
+                booksContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No books found</p>';
+                return;
+            }
+
+            booksContainer.innerHTML = books.map(book => `
+                <div class="book-card">
+                    <div class="book-cover" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer;" onclick="window.location.href='book-detail.html?id=${book.id}'">
+                        <div class="badge trending">${book.views > 200 ? 'Popular' : 'New'}</div>
+                    </div>
+                    <div class="book-details">
+                        <h3>${book.title}</h3>
+                        <p class="author">${book.author}</p>
+                        <p class="price">$${book.price.toFixed(2)}</p>
+                        <span class="condition">${book.condition}</span>
+                        <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 0.5rem;">by ${book.username}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load books on page load
+        loadBooks();
+    </script>
+</body>
+</html>

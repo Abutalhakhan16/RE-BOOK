@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Dashboard - ReBook</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: var(--surface);
+            border-radius: var(--radius-2xl);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius-xl);
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.1), rgba(236, 72, 153, 0.1));
+            color: var(--primary-light);
+        }
+
+        .sidebar-nav a.active {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.2), rgba(236, 72, 153, 0.15));
+            border-left: 3px solid var(--primary-light);
+            padding-left: calc(1rem - 3px);
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-2xl);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-light);
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-light), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .section-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-2xl);
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .shelf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .shelf-book {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            border-radius: var(--radius-lg);
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shelf-book:hover {
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.4);
+        }
+
+        .shelf-book::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(0, 0, 0, 0.15));
+        }
+
+        .shelf-book span {
+            position: relative;
+            z-index: 2;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .performance-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .chart-placeholder {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(236, 72, 153, 0.05));
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            text-align: center;
+        }
+
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--background);
+            border-radius: var(--radius-lg);
+            border-left: 3px solid var(--primary-light);
+        }
+
+        .activity-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+        }
+
+        .activity-text p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .activity-text .time {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .sidebar-nav a {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+                padding: 0.75rem;
+            }
+
+            .performance-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">ReBook</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="explore.html">Explore</a></li>
+                <li><a href="sell-upload.html">Sell</a></li>
+                <li><a href="publish-ebook.html">Publish</a></li>
+                <li><a href="dashboard.html" class="nav-button active">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active">📊 Dashboard</a></li>
+                <li><a href="#library">📚 My Library</a></li>
+                <li><a href="#upload">⬆️ Upload</a></li>
+                <li><a href="#earnings">💰 Earnings</a></li>
+                <li><a href="#settings">⚙️ Settings</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Stats Section -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Books Listed</div>
+                    <div class="stat-value" id="books-count">5</div>
+                    <p style="color: var(--text-light); font-size: 0.85rem;">Active listings</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">eBooks Published</div>
+                    <div class="stat-value" id="ebooks-count">3</div>
+                    <p style="color: var(--text-light); font-size: 0.85rem;">Digital publications</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Reads</div>
+                    <div class="stat-value" id="reads-count">1.2K</div>
+                    <p style="color: var(--text-light); font-size: 0.85rem;">Across all books</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Earnings (This Month)</div>
+                    <div class="stat-value" id="earnings-amount">$342</div>
+                    <p style="color: var(--text-light); font-size: 0.85rem;">Keep 85%</p>
+                </div>
+            </div>
+
+            <!-- My Library Section -->
+            <div class="section-card" id="library">
+                <div class="section-header">
+                    <h2>My Library</h2>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="sell-upload.html" class="btn btn-primary">+ Sell Book</a>
+                        <a href="publish-ebook.html" class="btn btn-secondary">+ Publish eBook</a>
+                    </div>
+                </div>
+                <div class="shelf-grid" id="library-shelf">
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"><span>The Midnight Library</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"><span>Project Hail Mary</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"><span>Atomic Habits</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%)"><span>The Seven Husbands</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%)"><span>Lessons in Chemistry</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)"><span>Watchmen</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%)"><span>Organic Chemistry</span></div>
+                    <div class="shelf-book" style="background: linear-gradient(135deg, #ffa502 0%, #ffbe02 100%)"><span>Learn Python</span></div>
+                </div>
+            </div>
+
+            <!-- Performance Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Performance</h2>
+                </div>
+                <div class="performance-section">
+                    <div class="chart-placeholder">
+                        <div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">Sales Trend</p>
+                            <p style="font-size: 2rem; color: var(--primary-light); font-weight: 800; margin: 0.5rem 0;">↗ +23%</p>
+                            <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">Last 7 days</p>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">Most Popular</p>
+                            <p style="font-size: 2rem; color: var(--neon-cyan); font-weight: 800; margin: 0.5rem 0;">Atomic Habits</p>
+                            <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">432 views this month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                </div>
+                <div class="activity-feed">
+                    <div class="activity-item">
+                        <span class="activity-icon">🎉</span>
+                        <div class="activity-text">
+                            <p><strong>New Sale!</strong> Someone bought "Atomic Habits"</p>
+                            <p class="time">2 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-icon">👀</span>
+                        <div class="activity-text">
+                            <p><strong>Profile View</strong> 12 people viewed your profile</p>
+                            <p class="time">5 hours ago</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-icon">⭐</span>
+                        <div class="activity-text">
+                            <p><strong>New Review</strong> 5-star rating on "The Midnight Library"</p>
+                            <p class="time">1 day ago</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-icon">📤</span>
+                        <div class="activity-text">
+                            <p><strong>eBook Published</strong> You published "Learn Python 3"</p>
+                            <p class="time">2 days ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 ReBook. Empowering readers and creators worldwide.</p>
+    </footer>
+
+    <script src="api-service.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // Load dashboard data on page load
+        async function loadDashboardData() {
+            try {
+                // Check if user is authenticated
+                if (!apiService.isAuthenticated()) {
+                    alert('Please log in first');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // Get current user profile
+                const profile = await apiService.getProfile();
+                const userId = profile.id;
+
+                // Get user's books
+                const books = await apiService.getUserBooks(userId);
+                const ebooks = await apiService.getUserEbooks(userId);
+
+                // Update stats
+                document.getElementById('books-count').textContent = books.length;
+                document.getElementById('ebooks-count').textContent = ebooks.length;
+                document.getElementById('earnings-amount').textContent = '$' + (profile.total_earnings || 0).toFixed(2);
+
+                // Calculate total reads
+                const totalReads = [...books, ...ebooks].reduce((sum, item) => sum + (item.views || 0), 0);
+                document.getElementById('reads-count').textContent = totalReads > 999 ? (totalReads / 1000).toFixed(1) + 'K' : totalReads;
+
+                // Render books in library
+                const shelfGradients = [
+                    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                    'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                    'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                    'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)',
+                    'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                    'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+                ];
+
+                const libraryShelf = document.getElementById('library-shelf');
+                const allItems = [...books.slice(0, 4), ...ebooks.slice(0, 4)];
+
+                if (allItems.length === 0) {
+                    libraryShelf.innerHTML = '<div class="empty-state"><p>No books or eBooks yet. Start by selling a book or publishing an eBook!</p></div>';
+                } else {
+                    libraryShelf.innerHTML = allItems.map((item, index) => `
+                        <div class="shelf-book" style="background: ${shelfGradients[index % shelfGradients.length]}">
+                            <span>${item.title || item.author_name}</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                alert('Error loading dashboard data: ' + error.message);
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
+</body>
+</html>

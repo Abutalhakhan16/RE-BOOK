@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Book - ReBook</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">ReBook</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="explore.html">Explore</a></li>
+                <li><a href="sell-upload.html" class="active">Sell</a></li>
+                <li><a href="publish-ebook.html">Publish</a></li>
+                <li><a href="dashboard.html" class="nav-button">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section style="max-width: 700px; margin: 4rem auto; padding: 0 2rem; flex: 1;">
+        <div style="background-color: var(--surface); border-radius: var(--radius-2xl); padding: 3rem; border: 1px solid var(--border); box-shadow: var(--shadow-lg);">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--primary-light), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Sell Your Book</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1rem;">Share your books with our community and earn money</p>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <button class="toggle-btn active" data-type="physical" style="flex: 1;">Physical Book</button>
+                <button class="toggle-btn" data-type="ebook" style="flex: 1;">Already an eBook?</button>
+            </div>
+
+            <form id="sell-form">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Book Title</label>
+                    <input type="text" id="book-title" placeholder="Enter book title" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Author</label>
+                    <input type="text" id="book-author" placeholder="Enter author name" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Category</label>
+                    <select id="book-category" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                        <option value="">Select a category</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Science Fiction">Science Fiction</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Self-Help">Self-Help</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div id="physical-fields">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Condition</label>
+                        <select id="book-condition" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                            <option value="">Select condition</option>
+                            <option value="Like New">Like New</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Price ($)</label>
+                        <input type="number" id="book-price" placeholder="0.00" step="0.01" min="0" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Description</label>
+                    <textarea id="book-description" placeholder="Describe the book, condition, any notes..." required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary); resize: vertical; min-height: 100px;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">List Your Book</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 ReBook. Empowering readers and creators worldwide.</p>
+    </footer>
+
+    <style>
+        .toggle-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border);
+            background-color: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            border-color: var(--primary-light);
+            color: white;
+        }
+
+        .toggle-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary-light);
+        }
+
+        .price-type-btn {
+            transition: all 0.3s ease;
+        }
+
+        .price-type-btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <script src="api-service.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        const toggleButtons = document.querySelectorAll('.toggle-btn');
+        const sellForm = document.getElementById('sell-form');
+
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                toggleButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        sellForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Check if user is authenticated
+            if (!apiService.isAuthenticated()) {
+                alert('Please log in first');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const bookData = {
+                    title: document.getElementById('book-title').value,
+                    author: document.getElementById('book-author').value,
+                    category: document.getElementById('book-category').value,
+                    condition: document.getElementById('book-condition').value,
+                    price: parseFloat(document.getElementById('book-price').value),
+                    description: document.getElementById('book-description').value
+                };
+
+                const response = await apiService.createBook(bookData);
+                alert('Book listed successfully!');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert('Error listing book: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

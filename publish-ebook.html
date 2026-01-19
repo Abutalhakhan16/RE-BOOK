@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publish eBook - ReBook</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">ReBook</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="explore.html">Explore</a></li>
+                <li><a href="sell-upload.html">Sell</a></li>
+                <li><a href="publish-ebook.html" class="active">Publish</a></li>
+                <li><a href="dashboard.html" class="nav-button">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section style="max-width: 800px; margin: 4rem auto; padding: 0 2rem; flex: 1;">
+        <div style="background-color: var(--surface); border-radius: var(--radius-2xl); padding: 3rem; border: 1px solid var(--border); box-shadow: var(--shadow-lg);">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--primary-light), var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Publish Your eBook</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1rem;">Share your story with our community of readers. 85% royalties on every sale.</p>
+
+            <form id="publish-form">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Book Title *</label>
+                    <input type="text" id="ebook-title" placeholder="Enter your book title" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Author Name *</label>
+                        <input type="text" id="ebook-author" placeholder="Your name" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Genre *</label>
+                        <select id="ebook-genre" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                            <option value="">Select genre</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Science Fiction">Science Fiction</option>
+                            <option value="Poetry">Poetry</option>
+                            <option value="Self-Help">Self-Help</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Book Description *</label>
+                    <textarea id="ebook-description" placeholder="Write a compelling description of your book..." required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary); resize: vertical; min-height: 120px;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Pricing *</label>
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                        <button type="button" class="price-toggle" data-price="free" style="flex: 1; padding: 0.75rem; border-radius: var(--radius-lg); border: 2px solid var(--border); background-color: transparent; color: var(--text-secondary); cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Free</button>
+                        <button type="button" class="price-toggle active" data-price="paid" style="flex: 1; padding: 0.75rem; border-radius: var(--radius-lg); border: 2px solid var(--primary-light); background-color: var(--primary-light); color: white; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Paid</button>
+                    </div>
+                    <div id="price-input" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--text-secondary);">$</span>
+                        <input type="number" placeholder="9.99" step="0.99" min="0.99" id="ebook-price-input" required style="flex: 1; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Upload eBook File (PDF, EPUB) *</label>
+                    <div style="border: 2px dashed var(--border); border-radius: var(--radius-xl); padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease;" id="file-drop">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary-light)" stroke-width="2" style="margin: 0 auto 1rem;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p style="color: var(--text-primary); font-weight: 600;">Drop your eBook here or click to browse</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">PDF, EPUB, or MOBI (max 100MB)</p>
+                        <input type="file" id="file-input" accept=".pdf,.epub,.mobi" style="display: none;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem; padding: 1rem; background-color: rgba(109, 40, 217, 0.1); border-radius: var(--radius-lg); border-left: 4px solid var(--primary-light);">
+                    <p style="color: var(--text-primary); font-weight: 600; margin-bottom: 0.5rem;">📊 Your Earnings</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">You earn 85% on every sale. If you price at $9.99, you'll earn $8.49 per sale.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Publish eBook</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 ReBook. Empowering readers and creators worldwide.</p>
+    </footer>
+
+    <script src="api-service.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        const priceToggles = document.querySelectorAll('.price-toggle');
+        const priceInput = document.getElementById('price-input');
+        const ebookPriceInput = document.getElementById('ebook-price-input');
+        let currentPriceType = 'paid';
+
+        priceToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                priceToggles.forEach(t => {
+                    t.classList.remove('active');
+                    t.style.backgroundColor = 'transparent';
+                    t.style.color = 'var(--text-secondary)';
+                    t.style.borderColor = 'var(--border)';
+                });
+                this.classList.add('active');
+                this.style.backgroundColor = 'var(--primary-light)';
+                this.style.color = 'white';
+                this.style.borderColor = 'var(--primary-light)';
+                
+                currentPriceType = this.dataset.price;
+                const isFree = currentPriceType === 'free';
+                priceInput.style.display = isFree ? 'none' : 'flex';
+                ebookPriceInput.required = !isFree;
+            });
+        });
+
+        const fileDropZone = document.getElementById('file-drop');
+        const fileInput = document.getElementById('file-input');
+
+        fileDropZone.addEventListener('click', () => fileInput.click());
+        fileDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropZone.style.borderColor = 'var(--primary-light)';
+            fileDropZone.style.backgroundColor = 'rgba(109, 40, 217, 0.1)';
+        });
+        fileDropZone.addEventListener('dragleave', () => {
+            fileDropZone.style.borderColor = 'var(--border)';
+            fileDropZone.style.backgroundColor = 'transparent';
+        });
+        fileDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropZone.style.borderColor = 'var(--border)';
+            fileDropZone.style.backgroundColor = 'transparent';
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+            }
+        });
+
+        document.getElementById('publish-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Check if user is authenticated
+            if (!apiService.isAuthenticated()) {
+                alert('Please log in first');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const ebookData = {
+                    title: document.getElementById('ebook-title').value,
+                    authorName: document.getElementById('ebook-author').value,
+                    genre: document.getElementById('ebook-genre').value,
+                    description: document.getElementById('ebook-description').value,
+                    priceType: currentPriceType,
+                    price: currentPriceType === 'paid' ? parseFloat(document.getElementById('ebook-price-input').value) : 0
+                };
+
+                const response = await apiService.publishEbook(ebookData);
+                alert('eBook published successfully!');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert('Error publishing eBook: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

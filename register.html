@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - ReBook</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <span class="logo-text">ReBook</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section style="max-width: 600px; margin: 3rem auto; padding: 0 2rem; flex: 1;">
+        <div style="background-color: var(--surface); border-radius: var(--radius-2xl); padding: 3rem; border: 1px solid var(--border); box-shadow: var(--shadow-lg);">
+            <h1 style="font-size: 2rem; margin-bottom: 1rem; text-align: center; background: linear-gradient(135deg, var(--primary-light), var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Join ReBook</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; text-align: center;">Create your account to start selling and publishing</p>
+
+            <form id="register-form">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">First Name</label>
+                        <input type="text" id="first-name" placeholder="John" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Last Name</label>
+                        <input type="text" id="last-name" placeholder="Doe" style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Username</label>
+                    <input type="text" id="username" placeholder="your_username" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Email</label>
+                    <input type="email" id="email" placeholder="your@email.com" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background-color: var(--background); color: var(--text-primary);">
+                    <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 0.5rem;">At least 6 characters</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1.5rem;">Create Account</button>
+            </form>
+
+            <div style="text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Already have an account?</p>
+                <a href="auth.html" class="btn btn-secondary" style="width: 100%; text-align: center;">Sign In</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 ReBook. Empowering readers and creators worldwide.</p>
+    </footer>
+
+    <script src="api-service.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            try {
+                const response = await apiService.register({
+                    username,
+                    email,
+                    password,
+                    firstName,
+                    lastName
+                });
+
+                alert('Account created! Redirecting to dashboard...');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert('Registration failed: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
