@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publish eBook — ReBook</title>
+  <meta name="description" content="Self-publish eBooks and digital essays with an 85% direct author royalty and global distribution.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+        <span class="logo-badge">Creators</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        <li><a href="sell-upload.html">Sell Book</a></li>
+        <li><a href="publish-ebook.html" class="active">Publish eBook</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="nav-cta-btn">
+          <span>Dashboard</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <button class="hamburger-btn" id="hamburger-toggle" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Overlay & Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation">
+    <div class="drawer-header">
+      <div class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="drawer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explore.html">Explore Catalog</a></li>
+      <li><a href="sell-upload.html">Sell a Book</a></li>
+      <li><a href="publish-ebook.html" class="active">Publish an eBook</a></li>
+      <li><a href="dashboard.html">Creator Dashboard</a></li>
+      <li><a href="auth.html">Sign In / Register</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <a href="dashboard.html" class="btn btn-secondary btn-block">View Dashboard</a>
+    </div>
+  </aside>
+
+  <!-- Main Publish Section -->
+  <main class="container-narrow" style="padding-top: 3.5rem; padding-bottom: 5rem;">
+    <div class="form-card">
+      <div class="form-header">
+        <h1>Publish Your eBook</h1>
+        <p>Distribute directly to thousands of curious readers. Keep 85% royalties on every copy.</p>
+      </div>
+
+      <form id="publish-ebook-form" onsubmit="handlePublishSubmit(event)">
+        <!-- Title -->
+        <div class="form-group">
+          <label class="form-label" for="eb-title">eBook Title <span class="req">*</span></label>
+          <input type="text" id="eb-title" class="form-input" placeholder="e.g. Modern CSS Layouts & Container Queries" required autocomplete="off">
+        </div>
+
+        <!-- Author & Genre Grid -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="eb-author">Author / Pen Name <span class="req">*</span></label>
+            <input type="text" id="eb-author" class="form-input" placeholder="e.g. Elena Rostova" required autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="eb-genre">Genre / Category <span class="req">*</span></label>
+            <select id="eb-genre" class="form-select" required>
+              <option value="">Select Genre</option>
+              <option value="Technology">Technology & Code</option>
+              <option value="Fiction">Fiction & Literature</option>
+              <option value="Non-Fiction">Non-Fiction & Essays</option>
+              <option value="Business">Business & Finance</option>
+              <option value="Self-Help">Self-Help & Personal Growth</option>
+              <option value="Science">Science & Mathematics</option>
+              <option value="Classics">Poetry & Philosophy</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="eb-desc">Description / Synopsis <span class="req">*</span></label>
+          <textarea id="eb-desc" class="form-textarea" placeholder="Explain what readers will discover, key chapters, and who this book is for..." required rows="4"></textarea>
+        </div>
+
+        <!-- Pricing Option Toggle -->
+        <div class="form-group">
+          <label class="form-label">Pricing Model <span class="req">*</span></label>
+          <div style="display: flex; gap: 0.75rem; margin-bottom: 0.85rem;">
+            <button type="button" class="btn btn-secondary" id="btn-price-paid" style="flex: 1; border-color: var(--text-primary); color: var(--text-primary); background: var(--bg-surface-raised);" onclick="setPricingMode('paid')">
+              Paid Edition
+            </button>
+            <button type="button" class="btn btn-ghost" id="btn-price-free" style="flex: 1;" onclick="setPricingMode('free')">
+              Free Community eBook
+            </button>
+          </div>
+
+          <!-- Price Input -->
+          <div id="price-input-row" style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.1rem; color: var(--text-muted);">$</span>
+            <input type="number" id="eb-price" class="form-input" placeholder="4.99" step="0.50" min="0.99" max="99.00" value="4.99" oninput="calculateRoyalty()">
+          </div>
+        </div>
+
+        <!-- Royalty Calculation Banner -->
+        <div class="royalty-banner" id="royalty-box">
+          <div class="royalty-meta">
+            <p>Your Estimated Payout (85% Net)</p>
+            <strong id="royalty-calc-text">Earn $4.24 per sale deposited directly</strong>
+          </div>
+          <div class="royalty-amount" id="royalty-payout-display">$4.24</div>
+        </div>
+
+        <!-- eBook File Dropzone -->
+        <div class="form-group">
+          <label class="form-label">Upload eBook Asset (PDF, ePub) <span class="req">*</span></label>
+          <div class="dropzone" id="ebook-dropzone" onclick="document.getElementById('ebook-file-input').click()">
+            <div class="dropzone-icon">📄</div>
+            <div class="dropzone-title">Click to upload your manuscript or drag & drop</div>
+            <div class="dropzone-sub">Accepts ePub, PDF, or MOBI up to 50MB</div>
+            <input type="file" id="ebook-file-input" accept=".pdf,.epub,.mobi" style="display: none;" onchange="handleEbookFile(event)">
+          </div>
+          <div id="ebook-file-status" style="font-size: 0.82rem; color: var(--accent-success); margin-top: 0.4rem; display: none;">✓ Manuscript selected</div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem; margin-top: 1.5rem; font-size: 1rem;">
+          Publish & Launch eBook
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-bottom" style="border: none; padding-top: 0;">
+      <p>&copy; 2024 ReBook. Circular books, fair author royalties, simple design.</p>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="sell-upload.html">Sell</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="api-service.js"></script>
+  <script src="script.js"></script>
+  <script>
+    let currentPricingMode = 'paid';
+
+    function setPricingMode(mode) {
+      currentPricingMode = mode;
+      const btnPaid = document.getElementById('btn-price-paid');
+      const btnFree = document.getElementById('btn-price-free');
+      const priceRow = document.getElementById('price-input-row');
+      const royaltyBox = document.getElementById('royalty-box');
+      const priceInput = document.getElementById('eb-price');
+
+      if (mode === 'paid') {
+        btnPaid.className = 'btn btn-secondary';
+        btnPaid.style.borderColor = 'var(--text-primary)';
+        btnPaid.style.background = 'var(--bg-surface-raised)';
+        btnFree.className = 'btn btn-ghost';
+        btnFree.style.borderColor = 'transparent';
+        btnFree.style.background = 'transparent';
+        priceRow.style.display = 'flex';
+        royaltyBox.style.display = 'flex';
+        if (!priceInput.value || parseFloat(priceInput.value) === 0) {
+          priceInput.value = '4.99';
+        }
+        calculateRoyalty();
+      } else {
+        btnFree.className = 'btn btn-secondary';
+        btnFree.style.borderColor = 'var(--text-primary)';
+        btnFree.style.background = 'var(--bg-surface-raised)';
+        btnPaid.className = 'btn btn-ghost';
+        btnPaid.style.borderColor = 'transparent';
+        btnPaid.style.background = 'transparent';
+        priceRow.style.display = 'none';
+        royaltyBox.style.display = 'none';
+      }
+    }
+
+    function calculateRoyalty() {
+      if (currentPricingMode === 'free') return;
+      const price = parseFloat(document.getElementById('eb-price').value) || 0;
+      const royalty = (price * 0.85).toFixed(2);
+      document.getElementById('royalty-calc-text').textContent = `Earn $${royalty} per sale deposited directly`;
+      document.getElementById('royalty-payout-display').textContent = `$${royalty}`;
+    }
+
+    function handleEbookFile(e) {
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        document.getElementById('ebook-file-status').style.display = 'block';
+        document.getElementById('ebook-file-status').textContent = `✓ Manuscript selected: ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
+      }
+    }
+
+    async function handlePublishSubmit(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('eb-title').value.trim();
+      const author = document.getElementById('eb-author').value.trim();
+      const genre = document.getElementById('eb-genre').value;
+      const desc = document.getElementById('eb-desc').value.trim();
+      const price = currentPricingMode === 'free' ? 0.00 : (parseFloat(document.getElementById('eb-price').value) || 0);
+
+      const newEbook = {
+        id: 'user-eb-' + Date.now(),
+        title,
+        author,
+        category: genre,
+        format: 'ePub / PDF',
+        isEbook: true,
+        condition: currentPricingMode === 'free' ? 'Free Community eBook' : 'Digital Edition (Instant Access)',
+        price: price,
+        originalPrice: price > 0 ? price * 2 : 0,
+        rating: 5.0,
+        reviewsCount: 1,
+        coverTone: '#121A1D',
+        pages: 180,
+        year: 2024,
+        description: desc,
+        synopsis: desc,
+        sellerName: `${author} (Author)`,
+        sellerRating: 5.0,
+        views: 1,
+        downloads: 0,
+        isBestseller: false,
+        isTrending: true,
+        isStaffPick: false
+      };
+
+      // Save to local catalogue
+      const catalog = getStoredBooks();
+      catalog.unshift(newEbook);
+      saveStoredBooks(catalog);
+
+      // Attempt backend API if available
+      try {
+        if (typeof apiService !== 'undefined' && apiService.isAuthenticated()) {
+          await apiService.publishEbook({
+            title: newEbook.title,
+            author: newEbook.author,
+            genre: newEbook.category,
+            description: newEbook.description,
+            price: newEbook.price,
+            price_type: currentPricingMode
+          });
+        }
+      } catch (err) {
+        console.log('Saved to local digital library.');
+      }
+
+      showToast(`eBook "${newEbook.title}" published successfully!`, 'success');
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

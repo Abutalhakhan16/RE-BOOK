@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Dashboard — ReBook</title>
+  <meta name="description" content="Manage your book listings, published eBooks, sales analytics, and author royalties.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Dashboard-specific clean tab and badge styling */
+    .dashboard-tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.75rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .dashboard-tabs-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .dash-tab-btn {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    .dash-tab-btn:hover {
+      color: var(--text-primary);
+    }
+    .dash-tab-btn.active {
+      color: var(--text-primary);
+      font-weight: 600;
+      border-bottom-color: var(--text-primary);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-pill);
+    }
+    .status-active {
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--accent-success);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+    }
+    .status-sold {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text-secondary);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .activity-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.85rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-raised);
+      border: 1px solid var(--border-subtle);
+    }
+    .activity-icon {
+      font-size: 1.2rem;
+      padding: 0.35rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+    }
+    .activity-details strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .activity-details p {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      margin-top: 0.2rem;
+    }
+    .activity-time {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+        <span class="logo-badge">Dashboard</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        <li><a href="sell-upload.html">Sell Book</a></li>
+        <li><a href="publish-ebook.html">Publish eBook</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="explore.html" class="btn btn-secondary btn-sm">Browse Catalog</a>
+        <button class="hamburger-btn" id="hamburger-toggle" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Overlay & Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation">
+    <div class="drawer-header">
+      <div class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="drawer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explore.html">Explore Catalog</a></li>
+      <li><a href="sell-upload.html">Sell a Book</a></li>
+      <li><a href="publish-ebook.html">Publish an eBook</a></li>
+      <li><a href="dashboard.html" class="active">Creator Dashboard</a></li>
+      <li><a href="auth.html">Account Settings</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <a href="sell-upload.html" class="btn btn-primary btn-block">List New Item</a>
+    </div>
+  </aside>
+
+  <!-- Main Dashboard Layout -->
+  <div class="dashboard-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="dashboard-sidebar">
+      <div class="creator-profile-badge">
+        <div class="creator-avatar" id="avatar-initials">ER</div>
+        <div class="creator-info">
+          <h4 id="user-display-name">Elena Rostova</h4>
+          <p id="user-display-email">author@rebook.org</p>
+        </div>
+      </div>
+
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item active" data-tab="overview">
+          <button onclick="switchTab('overview')">
+            <span>📊</span> Overview & Analytics
+          </button>
+        </li>
+        <li class="sidebar-nav-item" data-tab="physical-books">
+          <button onclick="switchTab('physical-books')">
+            <span>📖</span> My Physical Books (<span id="sidebar-physical-count">6</span>)
+          </button>
+        </li>
+        <li class="sidebar-nav-item" data-tab="published-ebooks">
+          <button onclick="switchTab('published-ebooks')">
+            <span>✍️</span> My Published eBooks (<span id="sidebar-ebooks-count">3</span>)
+          </button>
+        </li>
+        <li class="sidebar-nav-item" data-tab="sales-history">
+          <button onclick="switchTab('sales-history')">
+            <span>💳</span> Orders & Payouts
+          </button>
+        </li>
+      </ul>
+
+      <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.65rem;">
+        <a href="sell-upload.html" class="btn btn-secondary btn-sm btn-block">+ Sell Physical Book</a>
+        <a href="publish-ebook.html" class="btn btn-primary btn-sm btn-block">+ Publish New eBook</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="dashboard-main">
+      <!-- Mobile / Tablet Tab Switcher Bar -->
+      <div class="dashboard-tabs-bar">
+        <button class="dash-tab-btn active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+        <button class="dash-tab-btn" data-tab="physical-books" onclick="switchTab('physical-books')">Physical Books</button>
+        <button class="dash-tab-btn" data-tab="published-ebooks" onclick="switchTab('published-ebooks')">My eBooks</button>
+        <button class="dash-tab-btn" data-tab="sales-history" onclick="switchTab('sales-history')">Sales & Payouts</button>
+      </div>
+
+      <!-- Tab 1: Overview & Analytics -->
+      <section id="tab-overview" class="dashboard-tab-content">
+        <!-- 4 Clean Metric Cards -->
+        <div class="dashboard-stats-grid">
+          <div class="stat-card-clean">
+            <div class="stat-top">
+              <span class="stat-label">Net Creator Earnings</span>
+              <span class="stat-icon">💰</span>
+            </div>
+            <div class="stat-number" id="total-earnings">$1,842.50</div>
+            <div class="stat-diff">
+              <span>↑ 18.4%</span>
+              <span style="color: var(--text-muted);">vs last month</span>
+            </div>
+          </div>
+
+          <div class="stat-card-clean">
+            <div class="stat-top">
+              <span class="stat-label">eBook Reads & Downloads</span>
+              <span class="stat-icon">📥</span>
+            </div>
+            <div class="stat-number" id="total-reads">4,210</div>
+            <div class="stat-diff">
+              <span>↑ 340</span>
+              <span style="color: var(--text-muted);">new readers</span>
+            </div>
+          </div>
+
+          <div class="stat-card-clean">
+            <div class="stat-top">
+              <span class="stat-label">Physical Books Listed</span>
+              <span class="stat-icon">📚</span>
+            </div>
+            <div class="stat-number" id="physical-count">6</div>
+            <div class="stat-diff" style="color: var(--text-secondary);">
+              <span>4 Active • 2 Sold</span>
+            </div>
+          </div>
+
+          <div class="stat-card-clean">
+            <div class="stat-top">
+              <span class="stat-label">Author Royalty Rate</span>
+              <span class="stat-icon">⭐</span>
+            </div>
+            <div class="stat-number">85%</div>
+            <div class="stat-diff" style="color: var(--accent-warm);">
+              <span>Zero platform lock-in</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="dashboard-panel" style="margin-top: 1.5rem;">
+          <div class="panel-header">
+            <h3>Recent Store Activity</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Updated 5 minutes ago</span>
+          </div>
+
+          <div class="activity-timeline">
+            <div class="activity-item">
+              <div class="activity-icon">📥</div>
+              <div class="activity-details">
+                <strong>eBook Downloaded</strong>
+                <p>"Modern CSS Layouts & Container Queries" was purchased by user @jordan_dev.</p>
+              </div>
+              <span class="activity-time">24 mins ago</span>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">📦</div>
+              <div class="activity-details">
+                <strong>Physical Book Purchased</strong>
+                <p>"Designing Data-Intensive Applications" sold to verified buyer @marcus_b. Payout released.</p>
+              </div>
+              <span class="activity-time">3 hours ago</span>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">⭐</div>
+              <div class="activity-details">
+                <strong>New 5-Star Review</strong>
+                <p>"Deep Work Habits" received a verified review: "Remarkably practical, zero fluff."</p>
+              </div>
+              <span class="activity-time">1 day ago</span>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">✍️</div>
+              <div class="activity-details">
+                <strong>eBook Published</strong>
+                <p>"The Open Guide to Python & Data Tools" reached 1,000+ community reads.</p>
+              </div>
+              <span class="activity-time">3 days ago</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: My Physical Books -->
+      <section id="tab-physical-books" class="dashboard-tab-content" style="display: none;">
+        <div class="dashboard-panel">
+          <div class="panel-header">
+            <div>
+              <h3>My Listed Physical Books</h3>
+              <p style="color: var(--text-secondary); font-size: 0.86rem; margin-top: 0.2rem;">Manage your active copies, change prices, or mark as sold.</p>
+            </div>
+            <a href="sell-upload.html" class="btn btn-primary btn-sm">+ List Another Book</a>
+          </div>
+
+          <div class="table-responsive">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Book Title</th>
+                  <th>Author</th>
+                  <th>Condition</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="physical-books-tbody">
+                <!-- Populated dynamically via script -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: My Published eBooks -->
+      <section id="tab-published-ebooks" class="dashboard-tab-content" style="display: none;">
+        <div class="dashboard-panel">
+          <div class="panel-header">
+            <div>
+              <h3>My Published eBooks</h3>
+              <p style="color: var(--text-secondary); font-size: 0.86rem; margin-top: 0.2rem;">Digital releases, downloads, and 85% author royalty breakdowns.</p>
+            </div>
+            <a href="publish-ebook.html" class="btn btn-primary btn-sm">+ Publish New eBook</a>
+          </div>
+
+          <div class="table-responsive">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Title & Genre</th>
+                  <th>Format</th>
+                  <th>Price</th>
+                  <th>Downloads</th>
+                  <th>Net Earnings (85%)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ebooks-tbody">
+                <!-- Populated dynamically via script -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: Sales & Payouts -->
+      <section id="tab-sales-history" class="dashboard-tab-content" style="display: none;">
+        <div class="dashboard-panel">
+          <div class="panel-header">
+            <div>
+              <h3>Orders & Payout History</h3>
+              <p style="color: var(--text-secondary); font-size: 0.86rem; margin-top: 0.2rem;">Transparent payout records deposited directly to your connected account.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="showToast('Payout statement downloaded as CSV.', 'success')">Export Statement</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date</th>
+                  <th>Item Title</th>
+                  <th>Buyer</th>
+                  <th>Amount</th>
+                  <th>Payout Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#RB-8921</td>
+                  <td>Sep 21, 2026</td>
+                  <td>Modern CSS Layouts & Container Queries</td>
+                  <td>jordan_dev</td>
+                  <td style="font-weight: 600; color: var(--text-primary);">$4.24 net</td>
+                  <td><span class="status-badge status-active">Paid Out</span></td>
+                </tr>
+                <tr>
+                  <td>#RB-8919</td>
+                  <td>Sep 20, 2026</td>
+                  <td>Designing Data-Intensive Applications</td>
+                  <td>marcus_b</td>
+                  <td style="font-weight: 600; color: var(--text-primary);">$24.00</td>
+                  <td><span class="status-badge status-active">Paid Out</span></td>
+                </tr>
+                <tr>
+                  <td>#RB-8894</td>
+                  <td>Sep 18, 2026</td>
+                  <td>Deep Work Habits: Focus in an Age of Noise</td>
+                  <td>sophia_m</td>
+                  <td style="font-weight: 600; color: var(--text-primary);">$2.98 net</td>
+                  <td><span class="status-badge status-active">Paid Out</span></td>
+                </tr>
+                <tr>
+                  <td>#RB-8850</td>
+                  <td>Sep 15, 2026</td>
+                  <td>Atomic Habits (Hardcover)</td>
+                  <td>claire_read</td>
+                  <td style="font-weight: 600; color: var(--text-primary);">$8.50</td>
+                  <td><span class="status-badge status-active">Paid Out</span></td>
+                </tr>
+                <tr>
+                  <td>#RB-8812</td>
+                  <td>Sep 12, 2026</td>
+                  <td>The Midnight Library</td>
+                  <td>kevin_h</td>
+                  <td style="font-weight: 600; color: var(--text-primary);">$7.50</td>
+                  <td><span class="status-badge status-active">Paid Out</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-bottom" style="border: none; padding-top: 0;">
+      <p>&copy; 2024 ReBook. Designed with minimal elegance and responsive simplicity.</p>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="sell-upload.html">Sell</a>
+        <a href="publish-ebook.html">Publish</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="api-service.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Sample Creator Physical Books & eBooks
+    let userPhysicalBooks = [
+      { id: 'b-08', title: 'Designing Data-Intensive Applications', author: 'Martin Kleppmann', condition: 'Like New', price: 24.00, status: 'Active' },
+      { id: 'b-14', title: 'Atomic Habits', author: 'James Clear', condition: 'Like New', price: 8.50, status: 'Active' },
+      { id: 'b-01', title: 'The Midnight Library', author: 'Matt Haig', condition: 'Like New', price: 7.50, status: 'Active' },
+      { id: 'b-10', title: 'Grokking Algorithms', author: 'Aditya Bhargava', condition: 'Like New', price: 16.00, status: 'Active' },
+      { id: 'b-05', title: 'Project Hail Mary', author: 'Andy Weir', condition: 'Like New', price: 9.50, status: 'Sold' },
+      { id: 'b-06', title: 'Dune (Deluxe Collector Edition)', author: 'Frank Herbert', condition: 'Very Good', price: 14.50, status: 'Sold' }
+    ];
+
+    let userEbooks = [
+      { id: 'eb-01', title: 'Modern CSS Layouts & Container Queries', genre: 'Technology', format: 'ePub / PDF', price: 4.99, downloads: 412, royalty: 4.24 },
+      { id: 'eb-02', title: 'Deep Work Habits: Focus in an Age of Noise', genre: 'Self-Help', format: 'ePub / PDF', price: 3.50, downloads: 304, royalty: 2.98 },
+      { id: 'eb-03', title: 'The Open Guide to Python & Data Tools', genre: 'Technology', format: 'PDF / Interactive', price: 0.00, downloads: 1240, royalty: 0.00 }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPhysicalBooksTable();
+      renderEbooksTable();
+      checkBackendAuth();
+    });
+
+    // Check if user is logged into real backend
+    async function checkBackendAuth() {
+      try {
+        if (typeof apiService !== 'undefined' && apiService.isAuthenticated()) {
+          const profile = await apiService.getProfile();
+          if (profile && profile.username) {
+            document.getElementById('user-display-name').textContent = profile.username;
+            document.getElementById('user-display-email').textContent = profile.email || 'author@rebook.org';
+            document.getElementById('avatar-initials').textContent = profile.username.slice(0, 2).toUpperCase();
+            
+            // Try fetching real books
+            try {
+              const realBooks = await apiService.getUserBooks(profile.id);
+              if (realBooks && realBooks.length > 0) {
+                userPhysicalBooks = realBooks;
+                renderPhysicalBooksTable();
+              }
+              const realEbooks = await apiService.getUserEbooks(profile.id);
+              if (realEbooks && realEbooks.length > 0) {
+                userEbooks = realEbooks;
+                renderEbooksTable();
+              }
+            } catch (err) {
+              console.log('Using demo data fallback.');
+            }
+          }
+        }
+      } catch (err) {
+        console.log('Running in offline/demo mode.');
+      }
+    }
+
+    function switchTab(tabId) {
+      // Toggle sidebar active item
+      document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+        if (item.dataset.tab === tabId) item.classList.add('active');
+        else item.classList.remove('active');
+      });
+
+      // Toggle mobile tab active item
+      document.querySelectorAll('.dash-tab-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      // Toggle tab content panels
+      document.querySelectorAll('.dashboard-tab-content').forEach(panel => {
+        panel.style.display = 'none';
+      });
+
+      const activePanel = document.getElementById(`tab-${tabId}`);
+      if (activePanel) {
+        activePanel.style.display = 'block';
+      }
+    }
+
+    function renderPhysicalBooksTable() {
+      const tbody = document.getElementById('physical-books-tbody');
+      if (!tbody) return;
+
+      document.getElementById('physical-count').textContent = userPhysicalBooks.length;
+      document.getElementById('sidebar-physical-count').textContent = userPhysicalBooks.length;
+
+      tbody.innerHTML = userPhysicalBooks.map(item => `
+        <tr>
+          <td><strong style="color: var(--text-primary);">${item.title}</strong></td>
+          <td>${item.author}</td>
+          <td><span class="book-condition-pill">${item.condition}</span></td>
+          <td style="font-weight: 600; color: var(--text-primary);">$${item.price.toFixed(2)}</td>
+          <td>
+            <span class="status-badge ${item.status === 'Active' ? 'status-active' : 'status-sold'}">
+              ${item.status}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-sm" onclick="handleRemoveBook('${item.id}')" title="Delete listing">
+              Remove
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderEbooksTable() {
+      const tbody = document.getElementById('ebooks-tbody');
+      if (!tbody) return;
+
+      document.getElementById('sidebar-ebooks-count').textContent = userEbooks.length;
+
+      tbody.innerHTML = userEbooks.map(item => {
+        const netTotal = (item.royalty * item.downloads).toFixed(2);
+        return `
+          <tr>
+            <td>
+              <strong style="color: var(--text-primary);">${item.title}</strong>
+              <div style="font-size: 0.76rem; color: var(--text-muted);">${item.genre}</div>
+            </td>
+            <td>${item.format}</td>
+            <td style="font-weight: 600; color: var(--text-primary);">${item.price === 0 ? 'Free' : `$${item.price.toFixed(2)}`}</td>
+            <td>${item.downloads} readers</td>
+            <td style="font-weight: 600; color: var(--accent-warm);">${item.price === 0 ? '$0.00 (Open Access)' : `$${netTotal}`}</td>
+            <td>
+              <button class="btn btn-ghost btn-sm" onclick="showToast('eBook price update dialog opened.')">
+                Edit
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function handleRemoveBook(id) {
+      if (confirm('Remove this book from your active listings?')) {
+        userPhysicalBooks = userPhysicalBooks.filter(b => b.id !== id);
+        renderPhysicalBooksTable();
+        showToast('Book listing removed successfully.', 'success');
+      }
+    }
+  </script>
+</body>
+</html>

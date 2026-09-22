@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — ReBook</title>
+  <meta name="description" content="Sign in to your ReBook creator or reader account.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="register.html" class="btn btn-secondary btn-sm">Create Account</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login Card Section -->
+  <main class="container-narrow" style="padding-top: 4rem; padding-bottom: 5rem;">
+    <div class="form-card">
+      <div class="form-header">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your ReBook account to manage your library and earnings.</p>
+      </div>
+
+      <!-- Quick 1-Click Demo Logins -->
+      <div class="demo-auth-box">
+        <div class="demo-auth-title">Quick Demo Access (No password required)</div>
+        <div class="demo-buttons-row">
+          <button type="button" class="btn btn-secondary btn-sm" style="flex: 1;" onclick="quickLoginDemo('author')">
+            ✍️ Demo Author
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" style="flex: 1;" onclick="quickLoginDemo('reader')">
+            📖 Demo Reader
+          </button>
+        </div>
+      </div>
+
+      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address <span class="req">*</span></label>
+          <input type="email" id="login-email" class="form-input" placeholder="elena@rebook.org" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <label class="form-label" for="login-password" style="margin-bottom: 0;">Password <span class="req">*</span></label>
+            <a href="#" style="font-size: 0.8rem; color: var(--text-muted);" onclick="alert('Password reset link would be sent in production.')">Forgot password?</a>
+          </div>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.85rem; margin-top: 1.5rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; color: var(--text-secondary);">
+        Don't have an account yet? <a href="register.html" style="color: var(--text-primary); font-weight: 600;">Create an account</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-bottom" style="border: none; padding-top: 0;">
+      <p>&copy; 2024 ReBook. Circular books, fair author royalties, simple design.</p>
+    </div>
+  </footer>
+
+  <script src="api-service.js"></script>
+  <script src="script.js"></script>
+  <script>
+    function quickLoginDemo(role) {
+      if (role === 'author') {
+        localStorage.setItem('authToken', 'demo-jwt-token-author-elena');
+        showToast('Logged in as Elena Rostova (Verified Author).', 'success');
+      } else {
+        localStorage.setItem('authToken', 'demo-jwt-token-reader-marcus');
+        showToast('Logged in as Marcus (Avid Reader).', 'success');
+      }
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 700);
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        if (typeof apiService !== 'undefined') {
+          const res = await apiService.login(email, password);
+          showToast('Login successful!', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
+          return;
+        }
+      } catch (err) {
+        // Backend not running; fallback to demo mode
+        console.warn('Backend unavailable, falling back to local demo sign-in.');
+        localStorage.setItem('authToken', 'demo-jwt-token-custom');
+        showToast('Signed in in offline preview mode.', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 800);
+      }
+    }
+  </script>
+</body>
+</html>

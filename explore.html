@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Books & eBooks — ReBook</title>
+  <meta name="description" content="Discover refurbished physical books and creator eBooks with real-time multi-facet filtering.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+        <span class="logo-badge">Beta</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="explore.html" class="active">Explore</a></li>
+        <li><a href="sell-upload.html">Sell Book</a></li>
+        <li><a href="publish-ebook.html">Publish eBook</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="nav-cta-btn">
+          <span>Dashboard</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <button class="hamburger-btn" id="hamburger-toggle" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Overlay & Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation">
+    <div class="drawer-header">
+      <div class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="drawer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explore.html" class="active">Explore Catalog</a></li>
+      <li><a href="sell-upload.html">Sell a Book</a></li>
+      <li><a href="publish-ebook.html">Publish an eBook</a></li>
+      <li><a href="dashboard.html">Creator Dashboard</a></li>
+      <li><a href="auth.html">Sign In / Register</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <a href="sell-upload.html" class="btn btn-secondary btn-block">List a Book for Sale</a>
+    </div>
+  </aside>
+
+  <!-- Main Explore Section -->
+  <main class="container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+    <div class="section-header-wrap">
+      <div>
+        <h1 class="section-title">Explore Catalog</h1>
+        <p class="section-subtitle">Browse through 30+ refurbished physical copies and instant digital releases.</p>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="explore-controls-wrap">
+      <!-- Search & Sorting Row -->
+      <div class="filter-top-row">
+        <div class="search-input-wrap">
+          <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="filter-search" placeholder="Filter by title, author, keyword, or ISBN..." autocomplete="off">
+        </div>
+
+        <div class="filter-selects-group">
+          <!-- Format Filter -->
+          <select id="filter-format" class="filter-select">
+            <option value="all">All Formats</option>
+            <option value="physical">Physical Books</option>
+            <option value="ebook">eBooks (Digital)</option>
+            <option value="free">Free Community eBooks</option>
+          </select>
+
+          <!-- Condition Filter -->
+          <select id="filter-condition" class="filter-select">
+            <option value="all">All Conditions</option>
+            <option value="Like New">Like New</option>
+            <option value="Very Good">Very Good</option>
+            <option value="Good">Good</option>
+          </select>
+
+          <!-- Sort Filter -->
+          <select id="filter-sort" class="filter-select">
+            <option value="popular">Most Popular</option>
+            <option value="newest">Newest Releases</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Top Rated (★)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Pills Horizontal Scroll -->
+      <div class="filter-pills-row" id="category-pills-container">
+        <button class="category-pill active" data-category="all">All Genres</button>
+        <button class="category-pill" data-category="Fiction">Fiction</button>
+        <button class="category-pill" data-category="Science Fiction">Sci-Fi</button>
+        <button class="category-pill" data-category="Technology">Technology</button>
+        <button class="category-pill" data-category="Non-Fiction">Non-Fiction</button>
+        <button class="category-pill" data-category="Business">Business</button>
+        <button class="category-pill" data-category="Self-Help">Self-Help</button>
+        <button class="category-pill" data-category="Science">Science</button>
+        <button class="category-pill" data-category="Graphic Novels">Graphic Novels</button>
+        <button class="category-pill" data-category="Classics">Classics</button>
+      </div>
+    </div>
+
+    <!-- Results Meta Count Bar -->
+    <div class="results-meta-bar">
+      <div class="results-count" id="results-count">
+        Showing <span id="count-number">0</span> titles
+      </div>
+      <button class="btn btn-ghost btn-sm" id="reset-filters-btn" style="display: none;" onclick="resetAllFilters()">
+        ✕ Clear all filters
+      </button>
+    </div>
+
+    <!-- Dynamic Books Grid -->
+    <div class="books-grid" id="explore-books-grid">
+      <!-- Populated via script -->
+    </div>
+
+    <!-- Empty State (hidden by default) -->
+    <div class="empty-state" id="no-results-state" style="display: none;">
+      <div class="empty-state-icon">🔍</div>
+      <h3>No matching books found</h3>
+      <p>We couldn't find any books matching your exact search or filter combination. Try clearing your filters or searching a different term.</p>
+      <button class="btn btn-secondary" onclick="resetAllFilters()">Reset Filters</button>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-bottom" style="border: none; padding-top: 0;">
+      <p>&copy; 2024 ReBook. Circular books, fair author royalties, simple design.</p>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="index.html">Home</a>
+        <a href="sell-upload.html">Sell</a>
+        <a href="publish-ebook.html">Publish</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="api-service.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // State management for Explore filtering
+    let activeCategory = 'all';
+    let activeFormat = 'all';
+    let activeCondition = 'all';
+    let activeSort = 'popular';
+    let activeSearch = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Parse URL parameters if present
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('category')) {
+        activeCategory = urlParams.get('category');
+      }
+      if (urlParams.get('format')) {
+        activeFormat = urlParams.get('format');
+        document.getElementById('filter-format').value = activeFormat;
+      }
+      if (urlParams.get('search')) {
+        activeSearch = urlParams.get('search');
+        document.getElementById('filter-search').value = activeSearch;
+      }
+
+      // Sync Category Pills UI
+      document.querySelectorAll('#category-pills-container .category-pill').forEach(btn => {
+        if (btn.dataset.category.toLowerCase() === activeCategory.toLowerCase()) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#category-pills-container .category-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeCategory = btn.dataset.category;
+          applyFilters();
+        });
+      });
+
+      // Bind input events
+      const searchInput = document.getElementById('filter-search');
+      searchInput.addEventListener('input', (e) => {
+        activeSearch = e.target.value.trim().toLowerCase();
+        applyFilters();
+      });
+
+      document.getElementById('filter-format').addEventListener('change', (e) => {
+        activeFormat = e.target.value;
+        applyFilters();
+      });
+
+      document.getElementById('filter-condition').addEventListener('change', (e) => {
+        activeCondition = e.target.value;
+        applyFilters();
+      });
+
+      document.getElementById('filter-sort').addEventListener('change', (e) => {
+        activeSort = e.target.value;
+        applyFilters();
+      });
+
+      applyFilters();
+    });
+
+    function applyFilters() {
+      const allBooks = getStoredBooks();
+
+      let filtered = allBooks.filter(book => {
+        // Category Filter
+        if (activeCategory !== 'all' && book.category.toLowerCase() !== activeCategory.toLowerCase()) {
+          return false;
+        }
+
+        // Format Filter
+        if (activeFormat === 'physical' && book.isEbook) return false;
+        if (activeFormat === 'ebook' && !book.isEbook) return false;
+        if (activeFormat === 'free' && (!book.isEbook || book.price !== 0)) return false;
+
+        // Condition Filter
+        if (activeCondition !== 'all') {
+          if (!book.condition || !book.condition.toLowerCase().includes(activeCondition.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // Search Filter (Title, Author, Category, ISBN)
+        if (activeSearch) {
+          const matchTitle = book.title.toLowerCase().includes(activeSearch);
+          const matchAuthor = book.author.toLowerCase().includes(activeSearch);
+          const matchCategory = book.category.toLowerCase().includes(activeSearch);
+          const matchIsbn = (book.isbn || '').toLowerCase().includes(activeSearch);
+          if (!matchTitle && !matchAuthor && !matchCategory && !matchIsbn) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Sorting
+      if (activeSort === 'popular') {
+        filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
+      } else if (activeSort === 'newest') {
+        filtered.sort((a, b) => (b.year || 0) - (a.year || 0));
+      } else if (activeSort === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (activeSort === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (activeSort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      renderFilteredResults(filtered);
+    }
+
+    function renderFilteredResults(books) {
+      const grid = document.getElementById('explore-books-grid');
+      const noResults = document.getElementById('no-results-state');
+      const countEl = document.getElementById('count-number');
+      const resetBtn = document.getElementById('reset-filters-btn');
+
+      countEl.textContent = books.length;
+
+      // Show/hide reset button if any filter is active
+      const hasActiveFilters = activeCategory !== 'all' || activeFormat !== 'all' || activeCondition !== 'all' || activeSearch !== '';
+      resetBtn.style.display = hasActiveFilters ? 'inline-flex' : 'none';
+
+      if (books.length === 0) {
+        grid.style.display = 'none';
+        noResults.style.display = 'block';
+      } else {
+        grid.style.display = 'grid';
+        noResults.style.display = 'none';
+        grid.innerHTML = books.map(renderBookCardHTML).join('');
+      }
+    }
+
+    function resetAllFilters() {
+      activeCategory = 'all';
+      activeFormat = 'all';
+      activeCondition = 'all';
+      activeSearch = '';
+      activeSort = 'popular';
+
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-format').value = 'all';
+      document.getElementById('filter-condition').value = 'all';
+      document.getElementById('filter-sort').value = 'popular';
+
+      document.querySelectorAll('#category-pills-container .category-pill').forEach(btn => {
+        if (btn.dataset.category === 'all') btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      applyFilters();
+    }
+  </script>
+</body>
+</html>

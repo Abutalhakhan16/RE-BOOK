@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReBook — Buy, Sell & Publish Books</title>
+  <meta name="description" content="A minimal marketplace for curated refurbished books, creator eBooks, and conscious readers.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+        <span class="logo-badge">Beta</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        <li><a href="sell-upload.html">Sell Book</a></li>
+        <li><a href="publish-ebook.html">Publish eBook</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="nav-cta-btn">
+          <span>Dashboard</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <button class="hamburger-btn" id="hamburger-toggle" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Overlay & Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation">
+    <div class="drawer-header">
+      <div class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="drawer-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="explore.html">Explore Catalog</a></li>
+      <li><a href="sell-upload.html">Sell a Book</a></li>
+      <li><a href="publish-ebook.html">Publish an eBook</a></li>
+      <li><a href="dashboard.html">Creator Dashboard</a></li>
+      <li><a href="auth.html">Sign In / Register</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <a href="explore.html" class="btn btn-primary btn-block">Explore Books</a>
+      <p style="font-size: 0.78rem; color: var(--text-muted); text-align: center;">&copy; 2024 ReBook Inc.</p>
+    </div>
+  </aside>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-pill">
+        <span class="hero-pill-dot"></span>
+        <span>A conscious circular home for physical and digital books</span>
+      </div>
+      <h1 class="hero-title">Every story deserves a second life.</h1>
+      <p class="hero-subtitle">
+        Buy verified refurbished books at honest prices, sell your personal library effortlessly, or self-publish eBooks with an 85% creator royalty.
+      </p>
+
+      <!-- Instant Search Form -->
+      <form class="hero-search-box" action="explore.html" method="GET" onsubmit="handleHeroSearch(event)">
+        <input type="text" id="hero-search-input" name="search" placeholder="Search by title, author, topic, or ISBN..." autocomplete="off">
+        <button type="submit" class="hero-search-btn">
+          <span>Search</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Quick Genre Filter Tags -->
+      <div class="hero-tags">
+        <span class="hero-tag-label">Popular:</span>
+        <a href="explore.html?category=Fiction" class="tag-pill">Fiction</a>
+        <a href="explore.html?category=Technology" class="tag-pill">Technology</a>
+        <a href="explore.html?category=Science%20Fiction" class="tag-pill">Sci-Fi</a>
+        <a href="explore.html?category=Self-Help" class="tag-pill">Self-Help</a>
+        <a href="explore.html?category=Business" class="tag-pill">Business</a>
+        <a href="explore.html?category=Graphic%20Novels" class="tag-pill">Comics & Graphic</a>
+      </div>
+
+      <!-- Social Proof Metrics -->
+      <div class="hero-metrics">
+        <div class="metric-item">
+          <div class="metric-num">30,000+</div>
+          <div class="metric-label">Books recirculated</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-num">85%</div>
+          <div class="metric-label">Direct author royalty</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-num">4.9 / 5</div>
+          <div class="metric-label">Condition satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Curated Staff Picks Section -->
+  <section class="scroll-section">
+    <div class="container">
+      <div class="section-header-wrap">
+        <div>
+          <h2 class="section-title">Editor’s Picks</h2>
+          <p class="section-subtitle">Handpicked masterworks with verified condition ratings and exceptional value.</p>
+        </div>
+        <a href="explore.html" class="section-link">
+          <span>View all titles</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="scroll-container" id="staff-picks-container">
+        <!-- Dynamically populated from script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Refurbished Physical Books -->
+  <section class="scroll-section" style="background-color: rgba(255, 255, 255, 0.015);">
+    <div class="container">
+      <div class="section-header-wrap">
+        <div>
+          <h2 class="section-title">Trending Physical Books</h2>
+          <p class="section-subtitle">Affordable pre-loved copies in mint, like-new, and very good condition.</p>
+        </div>
+        <a href="explore.html?format=physical" class="section-link">
+          <span>Browse physical books</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="books-grid" id="trending-physical-grid">
+        <!-- Dynamically populated from script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Community eBooks Section -->
+  <section class="scroll-section">
+    <div class="container">
+      <div class="section-header-wrap">
+        <div>
+          <h2 class="section-title">Community eBooks & Digital Editions</h2>
+          <p class="section-subtitle">Independent essays, technical guides, and literary releases with zero wait time.</p>
+        </div>
+        <a href="explore.html?format=ebook" class="section-link">
+          <span>Browse all eBooks</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="books-grid" id="community-ebooks-grid">
+        <!-- Dynamically populated from script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Values / Value Props Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="section-header-wrap" style="text-align: center; justify-content: center; margin-bottom: 2.5rem;">
+        <div>
+          <h2 class="section-title">Why Readers & Authors Choose ReBook</h2>
+          <p class="section-subtitle" style="margin-bottom: 0;">Designed around transparency, circular consumption, and fair author compensation.</p>
+        </div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box">♻️</div>
+          <h3>Circular Economy</h3>
+          <p>Every book sold extends the lifecycle of physical print, keeping well-crafted editions out of landfills and in readers' hands.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-box">💎</div>
+          <h3>Rigorous Condition Grading</h3>
+          <p>Transparent grading (Like New, Very Good, Good) with spine inspection and page integrity guarantees so you know exactly what arrives.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-box">✍️</div>
+          <h3>85% Direct Author Royalty</h3>
+          <p>eBook authors keep the lion's share of their creative work. Publish within minutes with no distributor lock-ins or predatory cuts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h4>📚 ReBook</h4>
+        <p>A minimalist marketplace committed to the circular life of books, honest grading, and indie author freedom.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Explore</h5>
+        <ul class="footer-links">
+          <li><a href="explore.html">Browse All</a></li>
+          <li><a href="explore.html?category=Fiction">Fiction</a></li>
+          <li><a href="explore.html?category=Technology">Technology</a></li>
+          <li><a href="explore.html?format=free">Free eBooks</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Creators & Sellers</h5>
+        <ul class="footer-links">
+          <li><a href="sell-upload.html">Sell Physical Books</a></li>
+          <li><a href="publish-ebook.html">Publish eBooks</a></li>
+          <li><a href="dashboard.html">Creator Dashboard</a></li>
+          <li><a href="dashboard.html">Royalty Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Account</h5>
+        <ul class="footer-links">
+          <li><a href="auth.html">Sign In</a></li>
+          <li><a href="register.html">Create Account</a></li>
+          <li><a href="dashboard.html">My Orders</a></li>
+          <li><a href="dashboard.html">Saved Books</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 ReBook. Designed with minimal elegance and responsive simplicity.</p>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Homepage Dynamic Book Rendering
+    document.addEventListener('DOMContentLoaded', () => {
+      const books = getStoredBooks();
+
+      // Render Staff Picks in Scroll Container
+      const staffPicks = books.filter(b => b.isStaffPick).slice(0, 7);
+      const staffContainer = document.getElementById('staff-picks-container');
+      if (staffContainer) {
+        staffContainer.innerHTML = staffPicks.map(renderBookCardHTML).join('');
+      }
+
+      // Render Trending Physical Books in Grid
+      const physicalBooks = books.filter(b => !b.isEbook).slice(0, 8);
+      const physicalGrid = document.getElementById('trending-physical-grid');
+      if (physicalGrid) {
+        physicalGrid.innerHTML = physicalBooks.map(renderBookCardHTML).join('');
+      }
+
+      // Render Community eBooks in Grid
+      const ebooks = books.filter(b => b.isEbook).slice(0, 6);
+      const ebooksGrid = document.getElementById('community-ebooks-grid');
+      if (ebooksGrid) {
+        ebooksGrid.innerHTML = ebooks.map(renderBookCardHTML).join('');
+      }
+    });
+
+    function handleHeroSearch(e) {
+      e.preventDefault();
+      const val = document.getElementById('hero-search-input').value.trim();
+      if (val) {
+        window.location.href = `explore.html?search=${encodeURIComponent(val)}`;
+      } else {
+        window.location.href = 'explore.html';
+      }
+    }
+  </script>
+</body>
+</html>

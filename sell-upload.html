@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell Your Book — ReBook</title>
+  <meta name="description" content="List your physical book or eBook for sale with verified condition grading.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .sell-page-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (max-width: 992px) {
+      .sell-page-grid {
+        grid-template-columns: 1fr;
+      }
+      .preview-sticky-col {
+        order: -1;
+      }
+    }
+    .preview-sticky-col {
+      position: sticky;
+      top: 90px;
+    }
+    .preview-box-header {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+        <span class="logo-badge">Beta</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        <li><a href="sell-upload.html" class="active">Sell Book</a></li>
+        <li><a href="publish-ebook.html">Publish eBook</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="nav-cta-btn">
+          <span>Dashboard</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <button class="hamburger-btn" id="hamburger-toggle" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Overlay & Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation">
+    <div class="drawer-header">
+      <div class="logo">
+        <span class="logo-mark">📚</span>
+        <span class="logo-text">ReBook</span>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <ul class="drawer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explore.html">Explore Catalog</a></li>
+      <li><a href="sell-upload.html" class="active">Sell a Book</a></li>
+      <li><a href="publish-ebook.html">Publish an eBook</a></li>
+      <li><a href="dashboard.html">Creator Dashboard</a></li>
+      <li><a href="auth.html">Sign In / Register</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <a href="explore.html" class="btn btn-secondary btn-block">Explore Books</a>
+    </div>
+  </aside>
+
+  <!-- Main Sell Section -->
+  <main class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+    <div class="sell-page-grid">
+      <!-- Form Column -->
+      <div class="form-card" style="padding: 2.25rem;">
+        <div style="margin-bottom: 2rem;">
+          <h1 style="font-size: 1.85rem; margin-bottom: 0.35rem;">List a Book for Sale</h1>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">
+            Give your book a second life. Set your own price, select its verified condition, and reach conscious readers.
+          </p>
+        </div>
+
+        <form id="sell-book-form" onsubmit="handleFormSubmit(event)">
+          <!-- Title -->
+          <div class="form-group">
+            <label class="form-label" for="inp-title">Book Title <span class="req">*</span></label>
+            <input type="text" id="inp-title" class="form-input" placeholder="e.g. Sapiens: A Brief History of Humankind" required autocomplete="off">
+          </div>
+
+          <!-- Author & Genre Grid -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="inp-author">Author Name <span class="req">*</span></label>
+              <input type="text" id="inp-author" class="form-input" placeholder="e.g. Yuval Noah Harari" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inp-category">Category / Genre <span class="req">*</span></label>
+              <select id="inp-category" class="form-select" required>
+                <option value="">Select Category</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Technology">Technology</option>
+                <option value="Business">Business</option>
+                <option value="Self-Help">Self-Help</option>
+                <option value="Science">Science</option>
+                <option value="Classics">Classics</option>
+                <option value="Graphic Novels">Graphic Novels</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Condition & Price Grid -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="inp-condition">Condition Grade <span class="req">*</span></label>
+              <select id="inp-condition" class="form-select" required>
+                <option value="Like New">Like New (Flawless, crisp pages)</option>
+                <option value="Very Good">Very Good (Minimal shelf wear)</option>
+                <option value="Good">Good (Readable, intact spine)</option>
+                <option value="Fair">Fair (Noticeable wear/markings)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inp-price">Selling Price ($ USD) <span class="req">*</span></label>
+              <input type="number" id="inp-price" class="form-input" placeholder="8.50" step="0.25" min="1.00" max="999.00" required>
+            </div>
+          </div>
+
+          <!-- Format & Year Grid -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="inp-format">Book Format</label>
+              <select id="inp-format" class="form-select">
+                <option value="Paperback">Paperback</option>
+                <option value="Hardcover">Hardcover</option>
+                <option value="Collectible Edition">Collectible Edition</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="inp-year">Publication Year</label>
+              <input type="number" id="inp-year" class="form-input" placeholder="2022" min="1800" max="2026">
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label" for="inp-desc">Description & Condition Notes</label>
+            <textarea id="inp-desc" class="form-textarea" placeholder="Detail any minor cover wear, previous ownership notes, or edition highlights..." rows="3"></textarea>
+          </div>
+
+          <!-- Cover Image Dropzone -->
+          <div class="form-group">
+            <label class="form-label">Book Photos / Cover (Optional)</label>
+            <div class="dropzone" id="cover-dropzone" onclick="document.getElementById('file-upload').click()">
+              <div class="dropzone-icon">📷</div>
+              <div class="dropzone-title">Click to upload photo or drag & drop</div>
+              <div class="dropzone-sub">JPG, PNG, or WebP up to 10MB</div>
+              <input type="file" id="file-upload" accept="image/*" style="display: none;" onchange="handleFileChange(event)">
+            </div>
+            <div id="file-chosen-status" style="font-size: 0.8rem; color: var(--accent-success); margin-top: 0.4rem; display: none;">✓ Photo attached</div>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.85rem;">
+              Publish Listing
+            </button>
+            <a href="explore.html" class="btn btn-secondary">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Live Preview Column -->
+      <div class="preview-sticky-col">
+        <div class="preview-box-header">
+          <span>👁️ Live Buyer Preview</span>
+        </div>
+        
+        <div class="book-card" id="preview-card" style="cursor: default;">
+          <div class="book-cover-wrap" id="preview-cover" style="background-color: #161922;">
+            <div class="book-cover-spine"></div>
+            <div class="book-cover-top">
+              <span class="book-format-tag" id="prev-format-tag">Paperback</span>
+              <span class="badge new">New Listing</span>
+            </div>
+            <div class="book-cover-body">
+              <div class="book-cover-title" id="prev-title">Your Book Title</div>
+              <div class="book-cover-author" id="prev-author">Author Name</div>
+            </div>
+            <div class="book-cover-footer">
+              <span class="book-cover-genre" id="prev-category">Genre</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);" id="prev-year">2024</span>
+            </div>
+          </div>
+          <div class="book-details">
+            <div class="book-meta-row">
+              <div class="book-rating">
+                <span>★</span>
+                <span>5.0</span>
+                <span class="book-rating-count">(New)</span>
+              </div>
+              <span class="book-condition-pill" id="prev-condition">Like New</span>
+            </div>
+            <h4 class="book-title" id="prev-card-title">Your Book Title</h4>
+            <p class="book-author" id="prev-card-author">by Author Name</p>
+            <div class="book-pricing-row">
+              <span class="book-price" id="prev-price">$8.50</span>
+              <button class="book-action-btn" type="button">Inspect</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem; padding: 1rem; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px solid var(--border-subtle); font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+          <strong style="color: var(--text-primary); display: block; margin-bottom: 0.25rem;">💡 Seller Tip:</strong>
+          Books priced reasonably with accurate condition grading sell 3x faster within our community.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="footer-bottom" style="border: none; padding-top: 0;">
+      <p>&copy; 2024 ReBook. Circular books, fair author royalties, simple design.</p>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="publish-ebook.html">Publish eBook</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="api-service.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Live Preview Synchronizer
+    const titleInp = document.getElementById('inp-title');
+    const authorInp = document.getElementById('inp-author');
+    const categoryInp = document.getElementById('inp-category');
+    const conditionInp = document.getElementById('inp-condition');
+    const priceInp = document.getElementById('inp-price');
+    const formatInp = document.getElementById('inp-format');
+    const yearInp = document.getElementById('inp-year');
+
+    function updatePreview() {
+      const title = titleInp.value.trim() || 'Your Book Title';
+      const author = authorInp.value.trim() || 'Author Name';
+      const category = categoryInp.value || 'Genre';
+      const condition = conditionInp.value || 'Like New';
+      const price = parseFloat(priceInp.value) || 8.50;
+      const format = formatInp.value || 'Paperback';
+      const year = yearInp.value || '2024';
+
+      document.getElementById('prev-title').textContent = title;
+      document.getElementById('prev-author').textContent = author;
+      document.getElementById('prev-category').textContent = category;
+      document.getElementById('prev-condition').textContent = condition;
+      document.getElementById('prev-price').textContent = `$${price.toFixed(2)}`;
+      document.getElementById('prev-format-tag').textContent = format;
+      document.getElementById('prev-year').textContent = year;
+      document.getElementById('prev-card-title').textContent = title;
+      document.getElementById('prev-card-author').textContent = `by ${author}`;
+    }
+
+    [titleInp, authorInp, categoryInp, conditionInp, priceInp, formatInp, yearInp].forEach(el => {
+      el.addEventListener('input', updatePreview);
+      el.addEventListener('change', updatePreview);
+    });
+
+    function handleFileChange(e) {
+      if (e.target.files && e.target.files[0]) {
+        document.getElementById('file-chosen-status').style.display = 'block';
+        document.getElementById('file-chosen-status').textContent = `✓ Photo attached: ${e.target.files[0].name}`;
+      }
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const newBook = {
+        id: 'user-b-' + Date.now(),
+        title: titleInp.value.trim(),
+        author: authorInp.value.trim(),
+        category: categoryInp.value || 'General',
+        format: formatInp.value || 'Paperback',
+        isEbook: false,
+        condition: conditionInp.value || 'Good',
+        price: parseFloat(priceInp.value) || 5.00,
+        originalPrice: (parseFloat(priceInp.value) || 5.00) * 1.8,
+        rating: 5.0,
+        reviewsCount: 1,
+        coverTone: '#171B24',
+        pages: 320,
+        year: parseInt(yearInp.value) || 2024,
+        description: document.getElementById('inp-desc').value.trim() || 'Listed by community member.',
+        sellerName: 'You (Verified Seller)',
+        sellerRating: 5.0,
+        views: 1,
+        downloads: 0,
+        isBestseller: false,
+        isTrending: false,
+        isStaffPick: false
+      };
+
+      // Save locally
+      const stored = getStoredBooks();
+      stored.unshift(newBook);
+      saveStoredBooks(stored);
+
+      // Attempt backend submission if API is reachable
+      try {
+        if (typeof apiService !== 'undefined' && apiService.isAuthenticated()) {
+          await apiService.createBook({
+            title: newBook.title,
+            author: newBook.author,
+            category: newBook.category,
+            condition: newBook.condition,
+            price: newBook.price,
+            description: newBook.description
+          });
+        }
+      } catch (err) {
+        console.log('Saved to local library state.');
+      }
+
+      showToast(`"${newBook.title}" listed for sale successfully!`, 'success');
+      setTimeout(() => {
+        window.location.href = 'explore.html';
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
